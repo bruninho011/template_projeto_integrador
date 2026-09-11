@@ -5,7 +5,7 @@ Trabalho desenvolvido durante a disciplina de projeto Integrador
 
 ### 1. COMPONENTES<br>
 Integrantes do grupo<br>
-Bruno Alves :email_primeiro_componente@dominio.com<br>
+tste :email_primeiro_componente@dominio.com<br>
 segundo_componente_do_grupo:email_segundo_componente@dominio.com<br>
 ...
 
