@@ -1,0 +1,80 @@
+<!-- 
+  TELA: Cadastro de Usuários (cadastro.html)
+  OBJETIVO: Registrar novos Clientes ou Profissionais.
+  O QUE FAZER AQUI:
+  - Form com Nome, E-mail, Senha e Seleção (Radio/Select: "Cliente" ou "Profissional").
+  - Ao cadastrar, salva dados no Supabase Auth e insere na tabela 'usuarios'.
+  - Importar no final: Supabase CDN, js/supabase-config.js e js/auth.js.
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpMe - Criar Conta</title>
+    
+    <!-- Conectando as folhas de estilo (CSS) -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body>
+
+    <main class="container-login">
+        <div class="logo-container">
+            <h1>HelpMe</h1>
+            <p>Crie sua conta gratuitamente</p>
+        </div>
+
+        <!-- Formulário de Cadastro (O ID deve ser exatamente form-cadastro) -->
+        <form id="form-cadastro">
+            
+            <div class="campo-input">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome" required>
+            </div>
+
+            <div class="campo-input">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="Digite seu e-mail" required>
+            </div>
+
+            <div class="campo-input">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Crie uma senha (mín. 6 caracteres)" minlength="6" required>
+            </div>
+
+            <!-- Seleção de Perfil (O name deve ser exatamente tipo_usuario) -->
+            <div class="campo-selecao">
+                <p>Como você deseja usar o HelpMe?</p>
+                <div class="opcoes-radio">
+                    <label>
+                        <input type="radio" name="tipo_usuario" value="cliente" required>
+                        Quero contratar serviços
+                    </label>
+                    <label>
+                        <input type="radio" name="tipo_usuario" value="profissional" required>
+                        Quero trabalhar / Prestar serviços
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-cadastrar">Criar Conta</button>
+        </form>
+
+        <!-- Link para voltar ao login -->
+        <div class="links-extras">
+            <p>Já tem uma conta? <a href="index.html">Faça login aqui</a></p>
+        </div>
+    </main>
+
+    <!-- 1. Importa a biblioteca do Supabase oficial da internet -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Conecta as suas chaves do banco de dados -->
+    <script src="js/supabase-config.js"></script>
+    
+    <!-- 3. Roda a inteligência exclusiva da tela de cadastro -->
+    <script src="js/auth.js"></script>
+
+</body>
+</html>
