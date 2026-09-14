@@ -6,11 +6,11 @@ Trabalho desenvolvido durante a disciplina de projeto Integrador
 ### 1. COMPONENTES<br>
 Integrantes do grupo<br>
 Bruno Alves :email_primeiro_componente@dominio.com<br>
-Lucas dos Santos Felipe
-Davi Souza 
-Luiz Felipe
-Welkson 
-Gabriel:email_segundo_componente@dominio.com<br>
+Lucas dos Santos Felipe<br>
+Davi Souza <br>
+Luiz Felipe<br>
+Welkson <br>
+Gabriel<br>
 ...
 
  
