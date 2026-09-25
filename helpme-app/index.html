@@ -6,4 +6,77 @@
   - Adicionar botão "Entrar" com id="btn-entrar" e formulário id="form-login".
   - Link para cadastro (cadastro.html).
   - Importar no final: Supabase CDN, js/supabase-config.js e js/auth.js.
--->
+-->+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HelpMe - Login</title>
+    
+    <!-- Fontes e Ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- CSS Estilos -->
+    <link rel="stylesheet" href="assets/css/global.css"> <!-- O global que já criamos -->
+    <link rel="stylesheet" href="assets/css/auth.css">  <!-- O CSS específico desta tela -->
+</head>
+<body>
+
+    <main class="login-container">
+        <!-- Logo e Boas-vindas -->
+        <header class="login-header">
+            <div class="brand-logo">
+                <i class="ph-fill ph-house-line"></i>
+                <span>HelpMe</span>
+            </div>
+            <h1>Bem-vindo de volta</h1>
+            <p>Faça login para solicitar ou atender serviços.</p>
+        </header>
+
+        <!-- Formulário de Login -->
+        <form id="login-form" class="login-form">
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <div class="input-wrapper">
+                    <i class="ph ph-envelope"></i>
+                    <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <div class="input-wrapper">
+                    <i class="ph ph-lock-key"></i>
+                    <input type="password" id="senha" placeholder="••••••••" required autocomplete="current-password">
+                    <button type="button" id="toggle-password" class="icon-btn-inside" tabindex="-1">
+                        <i class="ph ph-eye"></i>
+                    </button>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-login" class="btn-primary">
+                Entrar
+                <i class="ph-bold ph-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Link para Cadastro -->
+        <footer class="login-footer">
+            <p>Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        </footer>
+    </main>
+
+    <!-- JS Scripts -->
+    <!-- Carrega o SDK do Supabase via CDN para testes rápidos no front -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/auth.js"></script>
+
+</body>
+</html>
