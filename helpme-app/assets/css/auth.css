@@ -136,7 +136,7 @@ body {
     justify-content: center;
     gap: 8px;
     background-color: var(--primary);
-    color: #FFFFFF;
+    color: #000000;
     border: none;
     padding: 16px;
     border-radius: 12px;
@@ -148,7 +148,7 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #0369A1;
+    background-color: #5b7a8a;
 }
 
 .btn-primary:active {

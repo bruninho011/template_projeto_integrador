@@ -1,4 +1,4 @@
-/* 
+/*
   ESTILO GLOBAL (global.css)
   OBJETIVO: Padronização visual de todo o sistema.
   CONTEÚDO:
@@ -7,4 +7,179 @@
   - Estilização genérica de botões, fontes e campos de texto.
 */
 
-/* assets/css/global.css */
+/* Fontes (mesmas dos protótipos) */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+/* ==========================================
+   CORES DA MARCA (baseadas nos protótipos)
+   ========================================== */
+:root {
+    --cor-primaria: #134e48;
+    --cor-primaria-escura: #0e3c37;
+    --cor-primaria-clara: #e3eeec;
+    --cor-destaque: #e07b33;
+    --cor-fundo: #f5f5f3;
+    --cor-branco: #ffffff;
+    --cor-borda: #e4e6e4;
+    --cor-texto: #1d2b29;
+    --cor-texto-suave: #5f6b69;
+    --cor-perigo: #c0392b;
+
+    --fonte-titulo: 'Manrope', system-ui, sans-serif;
+    --fonte-texto: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --raio: 8px;
+    --raio-card: 14px;
+    --sombra-card: 0 1px 3px rgba(16, 40, 36, 0.08);
+}
+
+/* ==========================================
+   RESET
+   ========================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--fonte-texto);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    font-family: var(--fonte-titulo);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--cor-primaria-escura);
+}
+
+a {
+    color: var(--cor-primaria);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* ==========================================
+   BOTÕES
+   ========================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--raio);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-bloco {
+    width: 100%;
+}
+
+.btn-primario {
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+.btn-primario:hover {
+    background: var(--cor-primaria-escura);
+}
+
+.btn-contorno {
+    background: var(--cor-branco);
+    border-color: var(--cor-borda);
+    color: var(--cor-primaria);
+}
+
+.btn-contorno:hover {
+    border-color: var(--cor-primaria);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* ==========================================
+   CAMPOS DE TEXTO
+   ========================================== */
+label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cor-texto);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background: var(--cor-branco);
+    color: var(--cor-texto);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px var(--cor-primaria-clara);
+}
+
+::placeholder {
+    color: #8a9492;
+}
+
+/* ==========================================
+   LOGO (ícone verde + nome)
+   ========================================== */
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--fonte-titulo);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--cor-primaria-escura);
+}
+
+.logo:hover {
+    text-decoration: none;
+}
+
+.logo-icone {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--raio);
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+[hidden] {
+    display: none !important;
+}
