@@ -7,27 +7,46 @@
 */
 
 /* assets/css/login.css */
+/* assets/css/login.css */
 
+/* ================= ANIMAÇÕES ================= */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================= LAYOUT BASE ================= */
 body {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     background-color: var(--bg-surface);
+    /* Previne rolagem desnecessária no mobile */
+    overflow-x: hidden; 
 }
 
 .login-container {
     width: 100%;
     max-width: 400px;
     background-color: var(--card-surface);
-    padding: 32px 24px;
+    padding: 40px 24px;
     border-radius: 24px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
     margin: 16px;
     border: 1px solid var(--border-light);
+    /* Sombra mais premium e difusa */
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 8px 16px -8px rgba(0, 0, 0, 0.04);
+    /* Aciona a animação de entrada */
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Header do Login */
+/* ================= HEADER DO LOGIN ================= */
 .login-header {
     text-align: center;
     margin-bottom: 32px;
@@ -42,24 +61,28 @@ body {
     font-size: 32px;
     font-weight: 800;
     margin-bottom: 16px;
+    letter-spacing: -1px;
 }
 
 .brand-logo i {
-    font-size: 36px;
+    font-size: 38px;
 }
 
 .login-header h1 {
     font-size: 24px;
+    font-weight: 800;
     color: var(--text-main);
     margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
 
 .login-header p {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-sec);
+    line-height: 1.4;
 }
 
-/* Formulário e Inputs */
+/* ================= FORMULÁRIO E INPUTS ================= */
 .login-form {
     display: flex;
     flex-direction: column;
@@ -69,13 +92,14 @@ body {
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .input-group label {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-main);
+    padding-left: 4px;
 }
 
 .input-wrapper {
@@ -86,35 +110,58 @@ body {
 
 .input-wrapper i.ph {
     position: absolute;
-    left: 14px;
-    font-size: 20px;
+    left: 16px;
+    font-size: 22px;
     color: var(--text-sec);
+    transition: color 0.3s ease;
 }
 
 .input-wrapper input {
     width: 100%;
-    padding: 14px 14px 14px 42px;
+    padding: 16px 16px 16px 48px;
     border: 1.5px solid var(--border-light);
     border-radius: 12px;
     font-size: 15px;
+    font-weight: 500;
     color: var(--text-main);
+    background-color: #FFFFFF;
     outline: none;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
+/* Interação de Foco no Input */
 .input-wrapper input:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+    background-color: #FFFFFF;
+    /* Anel de foco acessível e moderno */
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15); 
+}
+
+/* Muda a cor do ícone quando o input está focado */
+.input-wrapper input:focus + i.ph,
+.input-wrapper input:focus ~ i.ph {
+    color: var(--primary);
 }
 
 .icon-btn-inside {
     position: absolute;
-    right: 14px;
-    background: none;
+    right: 12px;
+    background: transparent;
     border: none;
     cursor: pointer;
     color: var(--text-sec);
-    font-size: 20px;
+    font-size: 22px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-btn-inside:hover {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
 }
 
 .forgot-password {
@@ -126,45 +173,66 @@ body {
     font-size: 13px;
     color: var(--primary);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
 }
 
-/* Botão Principal */
+.forgot-password a:hover {
+    opacity: 0.8;
+}
+
+/* ================= BOTÃO PRINCIPAL ================= */
 .btn-primary {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     background-color: var(--primary);
-    color: #000000;
+    color: #FFFFFF; /* Corrigido de #000000 para contraste */
     border: none;
     padding: 16px;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
 }
 
 .btn-primary:hover {
-    background-color: #5b7a8a;
+    background-color: #026AA0; /* Tom primário escurecido para hover */
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
 }
 
 .btn-primary:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
-/* Footer */
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ================= FOOTER ================= */
 .login-footer {
     text-align: center;
     margin-top: 32px;
     font-size: 14px;
     color: var(--text-sec);
+    font-weight: 500;
 }
 
 .login-footer a {
     color: var(--primary);
     font-weight: 700;
     text-decoration: none;
+    margin-left: 4px;
+    transition: opacity 0.2s ease;
+}
+
+.login-footer a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
 }

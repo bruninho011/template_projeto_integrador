@@ -14,6 +14,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpMe - Início</title>
 
+    <!-- Fontes (mesmas dos protótipos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
     <!-- Conectando as folhas de estilo (CSS) -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
@@ -92,11 +97,13 @@
     <!-- Modelo de card (clonado pelo JS para cada categoria) -->
     <template id="modelo-card-categoria">
         <a class="card-categoria">
-            <span class="avatar-categoria"></span>
-            <div>
+            <div class="card-topo">
+                <span class="avatar-categoria"></span>
                 <h2 class="card-categoria-nome"></h2>
-                <p class="card-categoria-descricao"></p>
             </div>
+
+            <p class="card-categoria-descricao"></p>
+
             <span class="btn-solicitar">Solicitar serviço</span>
         </a>
     </template>

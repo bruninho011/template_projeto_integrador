@@ -7,180 +7,141 @@
 // - Redirecionar: Cliente -> home-cliente.html | Profissional Aprovado -> feed-profissional.html | Pendente -> bloqueio.html
 
 
+// js/auth.js
+
+// ==========================================
+// 1. INICIALIZAÇÃO DO SUPABASE
+// ==========================================
+const SUPABASE_URL = 'https://btjjbtjxcbvswgezpwgc.supabase.com';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0ampidGp4Y2J2c3dnZXpwd2djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzODYyMjIsImV4cCI6MjEwNDk2MjIyMn0.fgGA99SxR7pYcsg2Ezr6EKyi4PzelHaKP5Z-tcaWgn4';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Aguarda o HTML carregar para buscar os elementos
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
-    // LÓGICA DA TELA DE CADASTRO
+    // 2. INTERAÇÃO DA INTERFACE (MOSTRAR SENHA)
+    // ==========================================
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    const senhaInput = document.getElementById('senha');
+
+    if (togglePasswordBtn && senhaInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            senhaInput.setAttribute('type', type);
+            
+            const icon = togglePasswordBtn.querySelector('i');
+            icon.classList.toggle('ph-eye');
+            icon.classList.toggle('ph-eye-slash');
+        });
+    }
+
+    // ==========================================
+    // 3. LÓGICA DE CADASTRO (cadastro.html)
     // ==========================================
     const formCadastro = document.getElementById('form-cadastro');
     
     if (formCadastro) {
         formCadastro.addEventListener('submit', async (e) => {
             e.preventDefault(); 
+            
+            const btnCadastro = formCadastro.querySelector('button[type="submit"]');
+            const textoOriginal = btnCadastro.innerHTML;
+            btnCadastro.innerHTML = '<i class="ph ph-spinner-gap ph-spin"></i> Cadastrando...';
+            btnCadastro.disabled = true;
 
             const nome = document.getElementById('nome').value;
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
+            // Pega o radio button selecionado (cliente ou profissional)
             const tipoUsuario = document.querySelector('input[name="tipo_usuario"]:checked').value; 
 
             try {
-                // Passo 1: Cria o usuário (Usando supabaseClient)
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                // Passo 1: Cria o usuário na Autenticação (Isso vai acionar o Trigger do SQL automaticamente)
+                const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: email,
                     password: senha,
+                    options: {
+                        data: { nome: nome } // Manda o nome para o Trigger usar
+                    }
                 });
 
                 if (authError) throw authError;
 
-                const status = (tipoUsuario === 'cliente') ? 'aprovado' : 'pendente';
+                // Passo 2: Se for Profissional, cria o perfil dele na tabela 'profissional'
+                if (tipoUsuario === 'profissional') {
+                    const userId = authData.user.id;
+                    
+                    const { error: dbError } = await supabase.from('profissional').insert([
+                        { id_usuario: userId }
+                    ]);
 
-                // Passo 2: Salva os detalhes na tabela (Usando supabaseClient)
-                const { error: dbError } = await supabaseClient.from('usuarios').insert([
-                    { 
-                        id: authData.user.id, 
-                        nome: nome, 
-                        tipo_usuario: tipoUsuario,
-                        status_aprovacao: status 
-                    }
-                ]);
-
-                if (dbError) throw dbError;
+                    if (dbError) throw dbError;
+                }
 
                 alert('Conta criada com sucesso! Faça login para continuar.');
                 window.location.href = 'index.html'; 
 
             } catch (erro) {
-                console.error(erro);
+                console.error("Erro no cadastro:", erro);
                 alert('Erro ao criar conta: ' + erro.message);
+                btnCadastro.innerHTML = textoOriginal;
+                btnCadastro.disabled = false;
             }
         });
     }
 
     // ==========================================
-    // LÓGICA DA TELA DE LOGIN
+    // 4. LÓGICA DE LOGIN (index.html)
     // ==========================================
-    const formLogin = document.getElementById('form-login');
+    const formLogin = document.getElementById('login-form'); // ou 'form-login', verifique seu HTML
 
     if (formLogin) {
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
+            const btnLogin = formLogin.querySelector('button[type="submit"]');
+            const textoOriginal = btnLogin.innerHTML;
+            btnLogin.innerHTML = '<i class="ph ph-spinner-gap ph-spin"></i> Entrando...';
+            btnLogin.disabled = true;
+
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
 
             try {
-                // Passo 1: Valida E-mail e Senha (Usando supabaseClient)
-                const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                // Passo 1: Valida E-mail e Senha
+                const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
                     email: email,
-                    password: senha,
+                    password: senha
                 });
 
                 if (authError) throw new Error('E-mail ou senha incorretos.');
 
-                const uid = authData.user.id;
+                const userId = authData.user.id;
 
-                // Passo 2: Busca quem é essa pessoa (Usando supabaseClient)
-                const { data: perfil, error: perfilError } = await supabaseClient
-                    .from('usuarios')
-                    .select('tipo_usuario, status_aprovacao')
-                    .eq('id', uid)
+                // Passo 2: Verifica se o usuário tem registro na tabela 'profissional'
+                const { data: profData, error: profError } = await supabase
+                    .from('profissional')
+                    .select('id_profissional')
+                    .eq('id_usuario', userId)
                     .single(); 
 
-                if (perfilError) throw new Error('Erro ao buscar perfil no banco.');
-
-                if (perfil.tipo_usuario === 'cliente') {
+                // Roteamento inteligente baseado no perfil
+                if (profData) {
+                    // Achou registro na tabela profissional = É prestador de serviço
+                    window.location.href = 'feed-profissional.html';
+                } else {
+                    // Não achou registro na tabela profissional = É apenas cliente
                     window.location.href = 'home-cliente.html';
-                } else if (perfil.tipo_usuario === 'profissional') {
-                    if (perfil.status_aprovacao === 'aprovado') {
-                        window.location.href = 'feed-profissional.html';
-                    } else {
-                        window.location.href = 'bloqueio.html';
-                    }
                 }
 
             } catch (erro) {
-                console.error(erro);
+                console.error("Erro no login:", erro);
                 alert(erro.message);
+                btnLogin.innerHTML = textoOriginal;
+                btnLogin.disabled = false;
             }
         });
-    }
-});
-
-
-// js/auth.js
-
-// 1. Configuração do Supabase (Substitua pelas suas chaves reais do painel do Supabase)
-const SUPABASE_URL = 'https://SUA-URL-AQUI.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA-CHAVE-ANON-AQUI';
-
-// Inicializa o cliente do Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// 2. Mapeamento de Elementos do DOM
-const loginForm = document.getElementById('login-form');
-const emailInput = document.getElementById('email');
-const senhaInput = document.getElementById('senha');
-const btnLogin = document.getElementById('btn-login');
-const togglePasswordBtn = document.getElementById('toggle-password');
-
-// 3. Interação de Interface (Mostrar/Ocultar Senha)
-togglePasswordBtn.addEventListener('click', () => {
-    const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    senhaInput.setAttribute('type', type);
-    
-    // Troca o ícone (Olho aberto / fechado)
-    const icon = togglePasswordBtn.querySelector('i');
-    icon.classList.toggle('ph-eye');
-    icon.classList.toggle('ph-eye-slash');
-});
-
-// 4. Lógica de Autenticação com Supabase
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evita que a página recarregue
-
-    const email = emailInput.value.trim();
-    const senha = senhaInput.value.trim();
-
-    // Estado de Loading no botão
-    const textOriginalBtn = btnLogin.innerHTML;
-    btnLogin.innerHTML = '<i class="ph ph-spinner-gap ph-spin"></i> Entrando...';
-    btnLogin.disabled = true;
-
-    try {
-        // Tenta fazer o login no Supabase Auth
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: senha
-        });
-
-        if (error) throw error;
-
-        // Sucesso no login. Agora verificamos o tipo de usuário na sua tabela 'usuario' / 'profissional'
-        const userId = data.user.id;
-
-        // Busca na tabela profissional para saber se ele é prestador de serviço
-        const { data: profData } = await supabase
-            .from('profissional')
-            .select('id_profissional')
-            .eq('id_usuario', userId)
-            .single();
-
-        // Roteamento inteligente baseado no perfil
-        if (profData) {
-            // É um profissional, manda pro feed dele
-            window.location.href = 'feed-profissional.html';
-        } else {
-            // É apenas cliente, manda pra home de solicitar serviço
-            window.location.href = 'home-cliente.html';
-        }
-
-    } catch (error) {
-        // Tratamento de erro elegante
-        console.error("Erro no login:", error.message);
-        alert("Falha no login. Verifique seu e-mail e senha.");
-        
-        // Restaura o botão
-        btnLogin.innerHTML = textOriginalBtn;
-        btnLogin.disabled = false;
     }
 });
